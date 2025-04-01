@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shooting Test</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+    #shootButton {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background-color: #f00;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="shootButton">Shoot</button>
+  <audio id="shootingSound" src="/storage/emulated/0/Download/clean-machine-gun-burst-98224.mp3" preload="auto"></audio>
+  <canvas id="myCanvas"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('myCanvas') });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    camera.position.z = 5;
+
+    const bulletGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+    const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    let bullets = [];
+
+    // Create a simple gun (for demonstration)
+    const gunGeometry = new THREE.BoxGeometry(0.2, 0.1, 1);
+    const gunMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
+    const gun = new THREE.Mesh(gunGeometry, gunMaterial);
+    scene.add(gun);
+    gun.position.z = -2; // Position the gun in front of the camera
+
+    document.getElementById('shootButton').addEventListener('click', shoot);
+
+    function shoot() {
+      const audio = document.getElementById('shootingSound');
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+
+      const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+      bullet.position.copy(gun.getWorldPosition(new THREE.Vector3())); // Bullet starts at gun's position
+      bullet.rotation.copy(gun.rotation); // Match gun's rotation
+
+      // Adjust bullet position to come from the gun's "muzzle"
+      bullet.translateZ(-0.6);
+
+      scene.add(bullet);
+      bullets.push(bullet);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      for (let i = 0; i < bullets.length; i++) {
+        bullets[i].position.z -= 0.1; // Move forward
+
+        if (bullets[i].position.z < -10) { // Remove when far away
+          scene.remove(bullets[i]);
+          bullets.splice(i, 1);
+          i--;
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
