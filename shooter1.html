@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Shooting Game</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+        #score { position: absolute; top: 10px; left: 10px; font-size: 20px; color: white; }
+    </style>
+</head>
+<body>
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gameCanvas') });
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        const scoreElement = document.getElementById('score');
+        let score = 0;
+
+        // Player
+        const playerGeometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+        const playerMaterial = new THREE.MeshBasicMaterial( { color: 0x00aaff } );
+        const player = new THREE.Mesh( playerGeometry, playerMaterial );
+        scene.add( player );
+        player.position.set(0, -2, 0);
+        const playerSpeed = 0.1;
+        const playerMovement = { left: false, right: false };
+
+        // Target
+        const targetGeometry = new THREE.SphereGeometry( 0.3, 32, 32 );
+        const targetMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+
+        const targets =[];
+        const numTargets = 5;
+        for (let i = 0; i < numTargets; i++) {
+            const newTarget = new THREE.Mesh(targetGeometry.clone(), targetMaterial.clone());
+            newTarget.position.set(
+                Math.random() * 10 - 5,
+                Math.random() * 5 + 1,
+                Math.random() * -10 - 5
+            )
+            scene.add(newTarget);
+            targets.push(newTarget);
+        }
+
+        // Projectiles
+        const projectileGeometry = new THREE.SphereGeometry( 0.1, 16, 16 );
+        const projectileMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        const projectiles =[];
+        const projectileSpeed = 0.2;
+
+        // Camera positioning
+        camera.position.z = 5;
+
+        function onMouseMove( event ) {
+            // Calculate mouse position in normalized device coordinates (-1 to +1) for both components.
+            // This can be used for aiming later.
+        }
+
+        function onMouseDown( event ) {
+            const projectile = new THREE.Mesh( projectileGeometry, projectileMaterial );
+            projectile.position.copy( player.position );
+            projectile.translateZ(0.6); // Spawn in front of the player
+            scene.add( projectile );
+            projectiles.push( projectile );
+        }
+
+        window.addEventListener( 'mousemove', onMouseMove, false );
+        window.addEventListener( 'mousedown', onMouseDown, false );
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft' || event.key === 'a') {
+                playerMovement.left = true;
+            } else if (event.key === 'ArrowRight' || event.key === 'd') {
+                playerMovement.right = true;
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.key === 'ArrowLeft' || event.key === 'a') {
+                playerMovement.left = false;
+            } else if (event.key === 'ArrowRight' || event.key === 'd') {
+                playerMovement.right = false;
+            }
+        });
+
+        function animate() {
+            requestAnimationFrame( animate );
+
+            // Player movement
+            if (playerMovement.left) {
+                player.position.x -= playerSpeed;
+            }
+            if (playerMovement.right) {
+                player.position.x += playerSpeed;
+            }
+
+            // Keep player within bounds (optional)
+            player.position.x = Math.max(-4, Math.min(4, player.position.x));
+
+            // Move projectiles
+            projectiles.forEach(projectile => {
+                projectile.translateZ( -projectileSpeed );
+
+                // Check for collisions
+                targets.forEach((target, targetIndex) => {
+                    if (projectile.position.distanceTo(target.position) < 0.4) {
+                        scene.remove(projectile);
+                        projectiles.splice(projectiles.indexOf(projectile), 1);
+                        scene.remove(target);
+                        targets.splice(targetIndex, 1);
+                        score++;
+                        scoreElement.textContent = `Score: ${score}`;
+
+                        // Optionally respawn the target
+                        if (targets.length < numTargets) {
+                            const newTarget = new THREE.Mesh(targetGeometry.clone(), targetMaterial.clone());
+                            newTarget.position.set(
+                                Math.random() * 10 - 5,
+                                Math.random() * 5 + 1,
+                                Math.random() * -10 - 5
+                            );
+                            scene.add(newTarget);
+                            targets.push(newTarget);
+                        }
+                    }
+                });
+
+                // Remove projectiles that go too far
+                if (projectile.position.z < -15) {
+                    scene.remove(projectile);
+                    projectiles.splice(projectiles.indexOf(projectile), 1);
+                }
+            });
+
+            renderer.render( scene, camera );
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(newWidth, newHeight);
+        });
+    </script>
+</body>
+</html>

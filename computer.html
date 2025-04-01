@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three.js HTML on Cube</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #iframe-container {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+    </style>
+</head>
+<body>
+    <div id="iframe-container">
+        <iframe id="myIframe" width="512" height="256" style="border: none;" src="computer.html"></iframe>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  
+    <script type="module">
+        //import * as THREE from 'three';
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry(5, 3, 0.1);
+        const cube = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial());
+        scene.add(cube);
+
+        camera.position.z = 5;
+
+        const iframe = document.getElementById('myIframe');
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 512;
+        canvas.height = 256;
+
+        function updateCanvas() {
+            context.fillStyle = '#FFFFFF';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(iframe, 0, 0, canvas.width, canvas.height);
+        }
+
+        let texture;
+
+        iframe.onload = () => {
+            updateCanvas();
+            texture = new THREE.CanvasTexture(canvas);
+            cube.material = new THREE.MeshBasicMaterial({ map: texture });
+        };
+
+        function animate() {
+            requestAnimationFrame(animate);
+            updateCanvas();
+            if (texture) {
+                texture.needsUpdate = true;
+            }
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        }, false);
+
+    </script>
+    <script>
+        //Create computer.html if it doesn't exist.
+        if(!document.getElementById('myIframe').src.includes("computer.html")){
+            const computerPage = `
+            <!DOCTYPE html>
+            <html>
+            <head><title>Computer Page</title></head>
+            <body>
+                <h1>Computer Data</h1>
+                <table id="data-table">
+                    <thead>
+                        <tr><th>Name</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>CPU</td><td>Intel i7</td></tr>
+                        <tr><td>RAM</td><td>16GB</td></tr>
+                    </tbody>
+                </table>
+                <button id="addRowButton">Add Row</button>
+                <script>
+                    function addRow() {
+                        const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+                        const newRow = table.insertRow(table.rows.length);
+                        const cell1 = newRow.insertCell(0);
+                        const cell2 = newRow.insertCell(1);
+                        cell1.innerHTML = "New Name";
+                        cell2.innerHTML = "New Value";
+                    }
+
+                    document.getElementById('addRowButton').addEventListener('click', addRow);
+                </script>
+            </body>
+            </html>
+            `;
+            const blob = new Blob([computerPage], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            document.getElementById('myIframe').src = url;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Three.js Example</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/@react-three/fiber@8.15.12/bundles/fiber.umd.js"></script>
+    <script src="https://unpkg.com/@react-three/drei@9.92.7/bundles/drei.umd.js"></script>
+
+    <script type="text/babel">
+        const { Canvas, useFrame, useLoader } = ReactThreeFiber;
+        const { OrbitControls, Environment } = ReactThreeDrei;
+        const { useRef } = React;
+        const { GLTFLoader } = THREE;
+
+        const Box = () => {
+          const mesh = useRef();
+          useFrame(() => (mesh.current.rotation.x += 0.01, mesh.current.rotation.y += 0.01));
+          return (
+            <mesh ref={mesh}>
+              <boxGeometry args={[1, 1, 1]} />
+              <meshStandardMaterial color={'hotpink'} />
+            </mesh>
+          );
+        };
+
+        const Model = () => {
+            const gltf = useLoader(GLTFLoader, 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/suzanne-lowpoly/model.gltf');
+            return <primitive object={gltf.scene} scale={0.5} />;
+        };
+
+        const App = () => {
+            return (
+                <Canvas camera={{ position: [0, 0, 5] }}>
+                    <ambientLight intensity={0.5} />
+                    <pointLight position={[10, 10, 10]} />
+                    <Box />
+                    <Model/>
+                    <OrbitControls />
+                    <Environment preset="sunset" />
+                </Canvas>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    </script>
+
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+        // This is a placeholder for Babel, so the above inline React code works.
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Hello, World!</title>
+  <style>
+  body{
+    background:black;
+    
+  }
+  
+  h1,h2{
+    text-align:center;
+    font-style:bold;
+    font-family:times;
+    color:white;
+    border:5px ridge white;
+  }
+  img{
+    width:100%;
+  }
+  #t1{
+    width:30%;
+    position:absolute;
+    top:100px;
+    left:0px;
+    opacity:0.3;
+    animation:blink 3s linear infinite;
+  }
+  @keyframes blink{
+    from{
+      opacity:1;
+    }
+    to{
+      opacity:0.5;
+    }
+  }
+  #t2{
+    width:50%;
+    position:absolute;
+    top:100px;right:0px;
+    opacity:0.5;
+    animation:blink1 5s linear infinite;
+  
+  }
+   @keyframes blink1{
+    from{
+      opacity:1;
+    }
+    to{
+      opacity:0.5;
+    }
+  }
+  #target{
+    width:50%;
+    poistion:absolute;
+    left:0px;
+  }
+   #matrix{
+    width:50%;
+     height:20%;
+    position:absolute;
+    right:0px;
+     top:290px;
+  }
+  #matrix:active{
+    filter:hue-rotate(220deg);
+  }
+  
+  #target:hover{
+    filter:hue-rotate(300deg);
+  }
+  </style>
+</head>
+<body>
+  <h1>
+    Hello, World!
+  </h1>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4tZtAyvdkYsGdur7fsNKBbjg9wR7k8C9nY_XMnQiGkDaB3CWwjfJSsNbi&s=10">
+  <img id="target" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIvrgBqbqxO8_URQAW87dRWaItgLk5_SCJt_-SpImrlyltvQOzkXWl-Oo&s=10">
+  <img id="t1" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAbJE_Ide6KE0VyvmBAWAfVyfZf_Egx65A4xonnZ3i6pfDaBmfBv4hFChW&s=10">
+  <img id="t2" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnh3zyCD1iSPVC_AllG2aprhYJJQvTYtmC3wmZdteovBvNCrTUlHIZvV8&s=10">
+  <img alt="MATRIX"id="matrix" src="/storage/emulated/0/documents/pixelLab/20250329_131946.jpg">
+  <h1>
+    MATRIX AI
+  </h1>
+  <h2>
+    HACKING......
+  </h2>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML on Three.js Cube</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #htmlContainer {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 250px;
+            height: 250px;
+            background-size:cover;
+            background-color: white;
+            border: 1px solid black;
+            overflow: hidden; /* Prevent scrollbars from affecting the canvas */
+        }
+    </style>
+</head>
+<body>
+    <div id="htmlContainer">
+        <h1>My HTML Content</h1>
+        <p>This is some HTML rendered on a Three.js cube.</p>
+        <p>You can add more elements here.</p>
+        <input type="text" placeholder="Type here" />
+        <button>Click me</button>
+
+    </div>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const geometry = new THREE.BoxGeometry();
+
+        function createCubeWithHTMLTexture() {
+            const htmlElement = document.getElementById('htmlContainer');
+
+            html2canvas(htmlElement).then(canvas => {
+                const texture = new THREE.CanvasTexture(canvas);
+                const material = new THREE.MeshBasicMaterial({ map: texture });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+
+                camera.position.z = 5;
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    cube.rotation.x += 0.01;
+                    cube.rotation.y += 0.01;
+                    renderer.render(scene, camera);
+                }
+
+                animate();
+            });
+        }
+
+        createCubeWithHTMLTexture();
+
+        window.addEventListener('resize', () => {
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+          renderer.setSize(width, height);
+          camera.aspect = width / height;
+          camera.updateProjectionMatrix();
+
+        });
+
+    </script>
+</body>
+</html>
