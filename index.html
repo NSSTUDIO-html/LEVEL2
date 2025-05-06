@@ -322,7 +322,7 @@ const texture1 = textureLoader53.load('https://encrypted-tbn0.gstatic.com/images
      a2.rotation.set(0, Math.PI, 0);
      a2.scale.set(0.05, 0.05, 0.05);
    import { armysuit } from 'as1.js';
-//import * as THREE from 'three'; // Assuming you're using Three.js
+ // Assuming you're using Three.js
 
 for (let i = 0; i < 4; i++) {
   const newArmysuit = armysuit.clone(); // Clone to create a new instance
@@ -345,7 +345,7 @@ import { ak47 } from 'sni1.js';
 import { mg1 } from 'mg1.js';
 import { egun } from 'hmg1.js';
 
-  //import * as THREE from 'three'; // Assuming you're using Three.js
+
 
 for (let i = 0; i < 5; i++) {
   const newArmysuit = vs.clone(); // Clone to create a new instance
@@ -431,8 +431,7 @@ sni1.push(newArmysuit1);
     import { rhand } from 'A2.js';
      
      let currentGun;
- //const rh = new THREE.Group();
-  // const rhand = new THREE.Group();
+ 
      function setGun(gunModel) {
        if (currentGun) {
          HT1.remove(currentGun);
@@ -443,14 +442,10 @@ sni1.push(newArmysuit1);
 );
        currentGun.scale.set(0.05, 0.05, 0.05);
       HT1.add(currentGun);
-       //rhand.add(currentGun);
+       
      }
 
-     setGun(gun); // Initial gun setup
- //currentGun.rotation.x = -Math.PI/2;
-   // currentGun.position.set(0,-11,-10);
-    // rh.add(rhand);
-  // rh.add(currentGun);
+     setGun(gun);
    scene.add(HT1);
      const textureLoader = new THREE.TextureLoader();
 
@@ -528,8 +523,7 @@ function shoot() {
    HT1.add(currentGun);
    function target() {
      
-     //rhand.rotation.x = Math.PI/2;
- //rhand.position.set(-0.4, 22, 49.8);
+     
      currentGun.rotation.x = -Math.PI;
  currentGun.position.set(-0.45, 23.7, 48.2);
      const audio = document.getElementById('tarSound'); // Replace 'myAudio' with your audio element's ID
