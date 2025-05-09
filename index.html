@@ -339,7 +339,8 @@ const texture1 = textureLoader53.load('https://encrypted-tbn0.gstatic.com/images
      AZ.rotation.set(0, Math.PI, 0);
      AZ.scale.set(0.07, 0.07, 0.07);
    
-     const HT1 = new THREE.Group();
+     let HT1 = new THREE.Group();
+    
      import { a2 } from './A2.js';
      HT1.add(a2);
      a2.position.set(-1, 23, 50);
