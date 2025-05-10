@@ -285,11 +285,13 @@ const camera = new THREE.PerspectiveCamera(
 );
 console.log("Camera created");
 
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gameCanvas"), antialias: true });
+// Correct
+const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-console.log("Renderer created");
+   
 let HT1 = new THREE.Group();
+   
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
