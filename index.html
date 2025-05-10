@@ -285,17 +285,14 @@ const camera = new THREE.PerspectiveCamera(
 );
 console.log("Camera created");
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-   
+// Create the renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true }); // smooth edges
+renderer.setSize(window.innerWidth, window.innerHeight);       // full screen
+document.body.appendChild(renderer.domElement);  
+   // attach to page
 let HT1 = new THREE.Group();
    
-window.addEventListener('resize', () => {
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-});
+
      scene.background = new THREE.Color(0x000000);
 
      import { BASE } from './vbase.js';
@@ -758,6 +755,11 @@ a2.add(camera);
        swipeDirectionX = 0;
        swipeDirectionY = 0;
      });
+   window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);     // resize renderer
+  camera.aspect = window.innerWidth / window.innerHeight;      // update camera
+  camera.updateProjectionMatrix();                             // apply changes
+});
      function animate() {
        requestAnimationFrame(animate);
        const moveSpeed = 0.8;
