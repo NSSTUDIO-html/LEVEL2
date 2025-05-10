@@ -266,7 +266,7 @@ meter {
 
    <meter min="0" max="100" value="100"></meter>
 <meter id="v"min="0" max="100" value="100"></meter>
-
+<canvas id="gameCanvas"></canvas>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
    <script type="module">
     
@@ -284,13 +284,16 @@ const camera = new THREE.PerspectiveCamera(
 );
 console.log("Camera created");
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gameCanvas"), antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 console.log("Renderer created");
 
-
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
      scene.background = new THREE.Color(0x000000);
 
      import { BASE } from './vbase.js';
