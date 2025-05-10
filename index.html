@@ -288,7 +288,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("game
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 console.log("Renderer created");
-
+let HT1 = new THREE.Group();
 window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -337,7 +337,7 @@ const texture1 = textureLoader53.load('https://encrypted-tbn0.gstatic.com/images
      AZ.rotation.set(0, Math.PI, 0);
      AZ.scale.set(0.07, 0.07, 0.07);
    
-     let HT1 = new THREE.Group();
+     
     
      import { a2 } from './A2.js';
      HT1.add(a2);
