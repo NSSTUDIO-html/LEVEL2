@@ -712,9 +712,9 @@ clickableDiv.addEventListener('click', () => {
        }
      }
      preloadImages(imageArray);
-a2.add(camera);
-   camera.position.set(1, 16, 80);
-   camera.lookAt(a2.position); // Look at the land object
+HT1.add(camera);
+   camera.position.set(1, 10, 0);
+   camera.lookAt(HT1.position); // Look at the land object
  
 
     // Map Camera Setup
@@ -814,7 +814,7 @@ a2.add(camera);
          camera.position.y = radius * Math.sin(angleY);
          camera.position.z = radius * Math.cos(angleY) * Math.sin(angleX);
 
-         camera.lookAt(HT1.position); // Look at the land object
+         camera.lookAt(10,10,0); // Look at the land object
        }
 
      
