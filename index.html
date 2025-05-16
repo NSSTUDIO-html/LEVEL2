@@ -286,9 +286,9 @@ const camera = new THREE.PerspectiveCamera(
 console.log("Camera created");
 
 // Create the renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true }); // smooth edges
-renderer.setSize(window.innerWidth, window.innerHeight);       // full screen
-document.body.appendChild(renderer.domElement);  
+const renderer = new THREE.WebGLRenderer({ antialias: false }); // Set false for better performance
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1)); // Prevent 4K on mobile
+renderer.outputEncoding = THREE.sRGBEncoding;  
    // attach to page
 let HT1 = new THREE.Group();
    
